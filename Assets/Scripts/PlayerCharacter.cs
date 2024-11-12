@@ -42,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
     {
         animator.SetFloat("Speed", inputVector.sqrMagnitude);
 
+        
+
     }
 
     private void FixedUpdate()
