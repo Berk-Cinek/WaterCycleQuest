@@ -44,6 +44,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""283f69f8-5b9c-4487-a5e2-24338a04ff98"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""action"": ""Shooting"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""11ccd7c2-fb55-4a92-bf8f-bcfb5995ca28"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Shooting = m_Player.FindAction("Shooting", throwIfNotFound: true);
+        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,12 +206,14 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Shooting;
+    private readonly InputAction m_Player_Dash;
     public struct PlayerActions
     {
         private @GameInput m_Wrapper;
         public PlayerActions(@GameInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Shooting => m_Wrapper.m_Player_Shooting;
+        public InputAction @Dash => m_Wrapper.m_Player_Dash;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -206,6 +229,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Shooting.started += instance.OnShooting;
             @Shooting.performed += instance.OnShooting;
             @Shooting.canceled += instance.OnShooting;
+            @Dash.started += instance.OnDash;
+            @Dash.performed += instance.OnDash;
+            @Dash.canceled += instance.OnDash;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -216,6 +242,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Shooting.started -= instance.OnShooting;
             @Shooting.performed -= instance.OnShooting;
             @Shooting.canceled -= instance.OnShooting;
+            @Dash.started -= instance.OnDash;
+            @Dash.performed -= instance.OnDash;
+            @Dash.canceled -= instance.OnDash;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -237,5 +266,6 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     {
         void OnMove(InputAction.CallbackContext context);
         void OnShooting(InputAction.CallbackContext context);
+        void OnDash(InputAction.CallbackContext context);
     }
 }
