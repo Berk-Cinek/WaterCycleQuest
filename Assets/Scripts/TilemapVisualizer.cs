@@ -21,7 +21,7 @@ public class TilemapVisualizer : MonoBehaviour
 
     private void PaintTiles(IEnumerable<Vector2Int> positions, Tilemap tilemap, TileBase tile)
     {
-        foreach (var position in positions) 
+        foreach (var position in positions)
         {
             PaintSingleTiles(tilemap, tile, position);
         }
@@ -45,7 +45,8 @@ public class TilemapVisualizer : MonoBehaviour
         if (WallTypeHelper.wallTop.Contains(typeAsInt))
         {
             tile = wallTop;
-        }else if (WallTypeHelper.wallSideRight.Contains(typeAsInt))
+        }
+        else if (WallTypeHelper.wallSideRight.Contains(typeAsInt))
         {
             tile = wallSideRight;
         }
