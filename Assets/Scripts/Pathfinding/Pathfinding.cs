@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class Pathfinding{
 
+    private Grid<PathNode> grid;
 
 }
