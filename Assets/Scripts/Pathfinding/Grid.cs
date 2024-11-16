@@ -66,7 +66,7 @@ public class Grid<TGridObject> {
     }
 
     // out int x & out int y allows us to return multiple values from a single function
-    private void GetXY(Vector3 worldPosition, out int x, out int y){
+    public void GetXY(Vector3 worldPosition, out int x, out int y){
         x = Mathf.FloorToInt((worldPosition - originPosition).x / cellSize);
         y = Mathf.FloorToInt((worldPosition - originPosition).y / cellSize);
     }
@@ -105,4 +105,26 @@ public class Grid<TGridObject> {
         return GetGridObject(x, y);
 
     }
+    public TGridObject GetNode(int x, int y)
+    {
+        if (x >= 0 && x < width && y >= 0 && y < height)
+        {
+            return gridArray[x, y];
+        }
+        else
+        {
+            Debug.LogError($"GetNode: Invalid coordinates ({x}, {y})");
+            return default(TGridObject); // Return null or default if out of bounds
+        }
+    }
+
+    public int GetWidth(){
+        return width;
+    }
+
+    public int GetHeight(){
+        return height;
+    }
+
+    
 }

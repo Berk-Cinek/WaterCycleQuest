@@ -5,8 +5,8 @@ using UnityEngine;
 public class PathNode{
     
     private Grid<PathNode> grid;
-    private int x;
-    private int y;
+    public int x;
+    public int y;
 
     public int gCost;
     public int hCost;
@@ -24,4 +24,11 @@ public class PathNode{
     {
         return x + ":" + y;
     }
+
+    public void CalculateFCost()
+    {
+        fCost =  gCost + hCost;
+    }
+
+
 }
