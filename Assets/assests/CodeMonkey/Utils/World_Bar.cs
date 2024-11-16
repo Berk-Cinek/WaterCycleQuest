@@ -17,7 +17,7 @@ namespace CodeMonkey.Utils {
     /*
      * Bar in the World, great for quickly making a health bar
      * */
-    public class World_Bar {
+    public class World_Bar  {
         
         private Outline outline;
         private GameObject gameObject;
