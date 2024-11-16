@@ -23,7 +23,6 @@ public class PlayerAimWeapon : MonoBehaviour
         aimAnimator = aimTransform.GetComponent<Animator>();
         aimGunEndPointTransform = aimTransform.Find("GunEndPointPosition");
 
-
     }
 
     private void Update()
@@ -80,10 +79,7 @@ public class PlayerAimWeapon : MonoBehaviour
             aimAnimator.SetTrigger("Shoot");
             OnShoot?.Invoke(this, new OnShootEventArgs { gunEndPointPosition = aimGunEndPointTransform.position, shootPosition = mousePosition, });
 
-
         }
-
-
 
     }
 }
