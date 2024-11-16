@@ -2,14 +2,18 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
-public class SimpleRandomWalkMapGenerator: AbstractMapGenerator
+public class SimpleRandomWalkMapGenerator : AbstractMapGenerator
 {
     [SerializeField]
     protected SimpleRandomWalkSO randomWalkParameters;
 
+    [SerializeField]
+    private PrefabGenerator prefabGenerator;
+
     protected override void RunProceduralGeneration()
     {
         HashSet<Vector2Int> floorPositions = RunRandomWalk(randomWalkParameters, startPosition);
+        prefabGenerator.PlacePrefabs(floorPositions);
         tilemapVisualizer.Clear();
         tilemapVisualizer.PaintFloorTiles(floorPositions);
         WallGenerator.CreateWalls(floorPositions, tilemapVisualizer);
@@ -25,10 +29,10 @@ public class SimpleRandomWalkMapGenerator: AbstractMapGenerator
             if (parameters.startRandomlyEachIteration)
             {
                 currentPosition = floorPositions.ElementAt(Random.Range(0, floorPositions.Count));
-            }            
+            }
         }
         return floorPositions;
     }
 
-    
+
 }
