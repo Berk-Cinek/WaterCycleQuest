@@ -43,6 +43,7 @@ public class NewPlayerMovement : MonoBehaviour
 
     void Update()
     {
+        
         HandleMovement();
     }
 
