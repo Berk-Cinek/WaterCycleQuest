@@ -91,8 +91,8 @@ public class RoomFirstMapGenerator : SimpleRandomWalkMapGenerator
     {
         HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
         var position = currentRoomCenter;
-
-        while (position.y != destination.y)
+        corridor.Add(position);
+        while(position.y != destination.y)
         {
             if (destination.y > position.y)
             {
@@ -102,33 +102,21 @@ public class RoomFirstMapGenerator : SimpleRandomWalkMapGenerator
             {
                 position += Vector2Int.down;
             }
-
-            for (int x = -1; x <= 0; x++) 
-            {
-                corridor.Add(position + new Vector2Int(x, 0));
-            }
+            corridor.Add(position);
         }
-
         while (position.x != destination.x)
         {
             if (destination.x > position.x)
             {
                 position += Vector2Int.right;
-            }
-            else if (destination.x < position.x)
+            }else if(destination.x < position.x)
             {
                 position += Vector2Int.left;
             }
-            
-            for (int y = -1; y <= 0; y++) 
-            {
-                corridor.Add(position + new Vector2Int(0, y));
-            }
+            corridor.Add(position);
         }
-
         return corridor;
     }
-
 
     private Vector2Int FindClosestPointTo(Vector2Int currentRoomCenter, List<Vector2Int> roomCenters)
     {
