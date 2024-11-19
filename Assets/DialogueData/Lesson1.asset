@@ -10,13 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39ae2f62d08dd8544bd426c20bd0caeb, type: 3}
-  m_Name: Test
+  m_Name: Lesson1
   m_EditorClassIdentifier: 
   dialogue:
-  - Hello there this is my first dialogue! Press Space to continue
-  - This is the second dialogue well done!
-  - Devamkeeeeee
-  - Devamkeeeeeeeeeeekekeke!!!...,,
+  - Oh welcome kid! So you want to become a water cycle expert?
+  - You are at the right place!
+  - I will teach you the basics here.
+  - We are going to have five lessons here.
+  - After each lesson, I will send you into a simulation where you will play as the
+    Water Spirit.
+  - Your mission will be to defeat the threats endangering the water cycle and help
+    people preserve their water resources!
+  - But the lessons are still incomplete, so for now, let's enter the simulation
+    and observe the atmosphere!
+  - Are you ready to save the world???!
   responses:
   - responseText: Yes
     dialogueObject: {fileID: 11400000, guid: d9e3a486d73db2c40aa06dd707a334c0, type: 2}

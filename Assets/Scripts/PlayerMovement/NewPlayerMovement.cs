@@ -6,6 +6,12 @@ using UnityEngine.InputSystem;
 
 public class NewPlayerMovement : MonoBehaviour
 {
+    [SerializeField] private DialogueUI dialogueUI;
+
+    public DialogueUI DialogueUI => dialogueUI;
+
+    public IInteractable Interactable { get; set; }
+
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashDuration = 0.2f;
@@ -44,27 +50,41 @@ public class NewPlayerMovement : MonoBehaviour
     void Update()
     {
         
-        HandleMovement();
-    }
+        if (dialogueUI.IsOpen)
+        {
+            rigidbody2D.velocity = Vector2.zero; 
+            movement = Vector2.zero; 
+            UpdateAnimator(Vector2.zero); 
+            return;
+        }
 
+        HandleMovement();
+
+        
+        if (Input.GetKeyDown(KeyCode.E) && !dialogueUI.IsOpen)
+        {
+            if (Interactable != null)
+            {
+                Interactable.Interact(this);
+            }
+        }
+    }
 
     private void FixedUpdate()
     {
-        rigidbody2D.MovePosition(rigidbody2D.position + movement * moveSpeed * Time.fixedDeltaTime);
-
-        if (!isDashing)
+        if (!isDashing && !dialogueUI.IsOpen)
         {
+            rigidbody2D.MovePosition(rigidbody2D.position + movement * moveSpeed * Time.fixedDeltaTime);
             rigidbody2D.velocity = new Vector2(movement.x, movement.y).normalized * _speed;
         }
     }
 
     private void HandleMovement()
     {
-        movement = gameInput.Player.Move.ReadValue<Vector2>();
+        if (dialogueUI.IsOpen) return; 
 
-        animator.SetFloat("Horizontal", movement.x);
-        animator.SetFloat("Vertical", movement.y);
-        animator.SetFloat("Speed", movement.sqrMagnitude);
+        movement = gameInput.Player.Move.ReadValue<Vector2>();
+        UpdateAnimator(movement);
 
         if (movement != Vector2.zero)
         {
@@ -72,14 +92,16 @@ public class NewPlayerMovement : MonoBehaviour
         }
     }
 
-    private bool TryMove(Vector2 dir, float distance)
+    private void UpdateAnimator(Vector2 currentMovement)
     {
-        return Physics2D.Raycast(rigidbody2D.position, dir, distance);
+        animator.SetFloat("Horizontal", currentMovement.x);
+        animator.SetFloat("Vertical", currentMovement.y);
+        animator.SetFloat("Speed", currentMovement.sqrMagnitude);
     }
 
     private void OnDashPerformed(InputAction.CallbackContext context)
     {
-        if (dashCooldownTimer <= 0f && !isDashing)
+        if (dashCooldownTimer <= 0f && !isDashing && !dialogueUI.IsOpen)
         {
             StartDash();
         }
@@ -100,11 +122,13 @@ public class NewPlayerMovement : MonoBehaviour
 
     private void StartDash()
     {
+        if (dialogueUI.IsOpen) return; 
+
         Debug.Log("dashing");
         isDashing = true;
         dashTimer = dashDuration;
         dashCooldownTimer = dashCooldown;
-        rigidbody2D.velocity = transform.up * dashSpeed;
+        rigidbody2D.velocity = lastMoveDir * dashSpeed;
     }
 
     private void EndDash()
