@@ -22,6 +22,7 @@ public class RoomFirstMapGenerator : SimpleRandomWalkMapGenerator
 
     private void CreateRooms()
     {
+
         var roomsList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(new BoundsInt((Vector3Int)startPosition, new Vector3Int(dungeonWidth,dungeonHeight,0)),minRoomWidth,minRoomHeight);
         
         HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
@@ -47,7 +48,7 @@ public class RoomFirstMapGenerator : SimpleRandomWalkMapGenerator
         HashSet<Vector2Int> corridors = ConnectRooms(roomCenters);
         floor.UnionWith(corridors);
 
-        tilemapVisualizer.PaintFloorTiles(floor);
+
         WallGenerator.CreateWalls(floor, tilemapVisualizer);
     }
 
