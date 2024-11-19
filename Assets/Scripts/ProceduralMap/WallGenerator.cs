@@ -16,8 +16,8 @@ public class WallGenerator : MonoBehaviour
         wallPositions.UnionWith(basicWallPositions);
         cornerPositions.UnionWith(cornerWallPositions);
 
-        CreateExpandedWalls(tilemapVisualizer, basicWallPositions, floorPositions, 2);
-        CreateExpandedCornerWalls(tilemapVisualizer, cornerWallPositions, floorPositions, 2);
+        CreateExpandedWalls(tilemapVisualizer, basicWallPositions, floorPositions, 3);
+        CreateExpandedCornerWalls(tilemapVisualizer, cornerWallPositions, floorPositions, 3);
 
         return (wallPositions, cornerPositions);
 =======
