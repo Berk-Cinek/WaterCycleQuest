@@ -15,10 +15,13 @@ MonoBehaviour:
   dialogue:
   - Oh welcome kid! So you want to become a water cycle expert?
   - You are at the right place!
-  - I will teach you the basics here.
+  - I will teach you the basics.
   - We are going to have five lessons here.
-  - After each lesson, I will send you into a simulation where you will play as the
-    Water Spirit.
+  - 'After each lesson, I will send you into a simulation where you will play as
+    the Water Spirit to deepen your understanding while having fun.
+
+
+'
   - Your mission will be to defeat the threats endangering the water cycle and help
     people preserve their water resources!
   - But the lessons are still incomplete, so for now, let's enter the simulation
