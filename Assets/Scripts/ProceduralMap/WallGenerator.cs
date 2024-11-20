@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WallGenerator : MonoBehaviour
 {
-<<<<<<< Updated upstream
     public static (HashSet<Vector2Int> wallPositions, HashSet<Vector2Int> cornerPositions) CreateWalls(HashSet<Vector2Int> floorPositions, TilemapVisualizer tilemapVisualizer)
     {
         HashSet<Vector2Int> wallPositions = new HashSet<Vector2Int>();
@@ -20,27 +19,6 @@ public class WallGenerator : MonoBehaviour
         CreateExpandedCornerWalls(tilemapVisualizer, cornerWallPositions, floorPositions, 3);
 
         return (wallPositions, cornerPositions);
-=======
-    public static HashSet<Vector2Int> CreateWalls(HashSet<Vector2Int> floorPositions, TilemapVisualizer tilemapVisualizer)
-    {
-        // Duvar pozisyonlarını saklamak için bir set
-        HashSet<Vector2Int> wallPositions = new HashSet<Vector2Int>();
-
-        // Ana duvar ve köşe duvar pozisyonlarını hesapla
-        var basicWallPositions = FindWallsInDirections(floorPositions, Direction2D.cardinalDirectionsList);
-        var cornerWallPositions = FindWallsInDirections(floorPositions, Direction2D.diagonalDirectionsList);
-
-        // Tüm duvar pozisyonlarını birleştir
-        wallPositions.UnionWith(basicWallPositions);
-        wallPositions.UnionWith(cornerWallPositions);
-
-        // Duvarları çiz
-        CreateBasicWall(tilemapVisualizer, basicWallPositions, floorPositions);
-        CreateCornerWalls(tilemapVisualizer, cornerWallPositions, floorPositions);
-
-        // Tüm duvar pozisyonlarını geri döndür
-        return wallPositions;
->>>>>>> Stashed changes
     }
 
     private static void CreateExpandedWalls(TilemapVisualizer tilemapVisualizer, HashSet<Vector2Int> wallPositions, HashSet<Vector2Int> floorPositions, int expansionSize)
@@ -71,7 +49,6 @@ public class WallGenerator : MonoBehaviour
     {
         foreach (var position in cornerWallPositions)
         {
-<<<<<<< Updated upstream
             string neighboursBinaryType = GetNeighboursBinaryType(position, floorPositions, Direction2D.eightDirectionsList);
 
             // Paint the initial corner wall
@@ -88,13 +65,6 @@ public class WallGenerator : MonoBehaviour
                         tilemapVisualizer.PaintSingleCornerWall(extendedPosition, neighboursBinaryType);
                     }
                 }
-=======
-            string neighboursBinaryType = "";
-            foreach (var direction in Direction2D.eightDirectionsList)
-            {
-                var neighbourPosition = position + direction;
-                neighboursBinaryType += floorPositions.Contains(neighbourPosition) ? "1" : "0";
->>>>>>> Stashed changes
             }
         }
     }
@@ -104,18 +74,8 @@ public class WallGenerator : MonoBehaviour
         string neighboursBinaryType = "";
         foreach (var direction in directionList)
         {
-<<<<<<< Updated upstream
             var neighbourPosition = position + direction;
             neighboursBinaryType += floorPositions.Contains(neighbourPosition) ? "1" : "0";
-=======
-            string neighboursBinaryType = "";
-            foreach (var direction in Direction2D.cardinalDirectionsList)
-            {
-                var neighbourPosition = position + direction;
-                neighboursBinaryType += floorPositions.Contains(neighbourPosition) ? "1" : "0";
-            }
-            tilemapVisualizer.PaintSingleBasicWall(position, neighboursBinaryType);
->>>>>>> Stashed changes
         }
         return neighboursBinaryType;
     }
@@ -134,10 +94,8 @@ public class WallGenerator : MonoBehaviour
                 }
             }
         }
-
         return wallPositions;
     }
-<<<<<<< Updated upstream
 }
 
 //public class WallGenerator : MonoBehaviour
@@ -300,6 +258,3 @@ public class WallGenerator : MonoBehaviour
 //        return wallPositions;
 //    }
 //}
-=======
-}
->>>>>>> Stashed changes
