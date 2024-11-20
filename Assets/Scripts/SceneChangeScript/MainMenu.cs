@@ -8,8 +8,7 @@ public class MainMenu : MonoBehaviour
 
     public void StartGame()
     {
-        int nextIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        SceneManager.LoadScene(nextIndex);
+        SceneManager.LoadScene("Facility");
     }
 
     public void QuitGame()
