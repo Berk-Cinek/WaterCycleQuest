@@ -16,10 +16,12 @@ public class ShootProjectiles : MonoBehaviour
 
     private void PlayerShootProjectiles_OnShoot(object sender, PlayerAimWeapon.OnShootEventArgs e)
     {
-        
+        Debug.Log("Inside Event");
+
         if (Time.time - lastShootTime >= cooldownTime)
         {
-            
+            Debug.Log("Shoot");
+
             Transform bulletTransform = Instantiate(pfBullet, e.gunEndPointPosition, Quaternion.identity);
 
            

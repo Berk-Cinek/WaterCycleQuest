@@ -1,17 +1,17 @@
 using System;
 
-public class HealthSystem 
+public class HealthSystem
 {
     public event EventHandler OnHealthChanged;
     public event EventHandler OnDead;
 
     private int health;
-    private int healthMax;
+    private int maxHealth;
 
-    public HealthSystem(int healthMax)
+    public HealthSystem(int maxHealth)
     {
-        this.healthMax = healthMax;
-        health = healthMax;
+        this.maxHealth = maxHealth;
+        health = maxHealth;
     }
 
     public int GetHealth()
@@ -21,30 +21,32 @@ public class HealthSystem
 
     public float GetHealthPercent()
     {
-        return (float)health/ healthMax;
+        return (float)health / maxHealth;
     }
 
     public void Damage(int damageAmount)
     {
         health -= damageAmount;
+        if (health < 0) health = 0;
 
-        if(health < 0) health = 0;
-        if(OnHealthChanged != null) OnHealthChanged(this, EventArgs.Empty);
-        if (health <= 0) Die();
-    }
+        OnHealthChanged?.Invoke(this, EventArgs.Empty);  // Trigger health change event
 
-    public void Die()
-    {
-        if (OnDead != null) OnDead(this, EventArgs.Empty);
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
     public void Heal(int healAmount)
     {
         health += healAmount;
-        if (health > healthMax) health = healthMax;
-        if (OnHealthChanged != null) OnHealthChanged(this, EventArgs.Empty);
+        if (health > maxHealth) health = maxHealth;
 
-
+        OnHealthChanged?.Invoke(this, EventArgs.Empty);  // Trigger health change event
     }
-    
+
+    private void Die()
+    {
+        OnDead?.Invoke(this, EventArgs.Empty);  // Trigger death event
+    }
 }

@@ -4,33 +4,34 @@ using UnityEngine;
 
 public class HealthBar : MonoBehaviour
 {
-    private HealthSystem healthSystem;
+    private int maxHealth;
+    private int currentHealth;
 
-    public void Setup(HealthSystem healthSystem)
-    {
-        this.healthSystem = healthSystem;
-        healthSystem.OnHealthChanged += HealthSystem_OnHealthChanged;
-        UpdateHealthBar();
-    }
+    [SerializeField] private Transform barTransform; // Reference to the health bar object (the fill part)
 
-    private void HealthSystem_OnHealthChanged(object sender, System.EventArgs e)
+    public void Setup(int maxHealth, int currentHealth)
     {
+        this.maxHealth = maxHealth;
+        this.currentHealth = currentHealth;
+
+        // Update the health bar UI
         UpdateHealthBar();
     }
 
     private void UpdateHealthBar()
     {
-        
-        transform.Find("Bar").localScale = new Vector3(healthSystem.GetHealthPercent(), 1);
+        if (barTransform != null)
+        {
+            // Update the scale of the health bar fill based on current health percentage
+            float healthPercent = (float)currentHealth / maxHealth;
+            barTransform.localScale = new Vector3(healthPercent, 1, 1);
+        }
     }
 
-    private void Update()
+    // Call this method to update the health
+    public void UpdateHealth(int newHealth)
     {
-        
-        if (transform.parent != null)
-        {
-            Vector3 playerPosition = transform.parent.position; 
-            transform.position = new Vector3(playerPosition.x, playerPosition.y + 1, playerPosition.z); 
-        }
+        currentHealth = newHealth;
+        UpdateHealthBar();
     }
 }
