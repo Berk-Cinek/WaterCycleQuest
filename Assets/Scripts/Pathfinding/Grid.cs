@@ -89,13 +89,16 @@ public class Grid<TGridObject> {
         SetGridObject(x, y, value);
     }
 
-    public TGridObject GetGridObject(int x, int y){
+    public TGridObject GetGridObject(int x, int y)
+    {
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
             return gridArray[x, y];
-        }else{
-            //return default of any TGridObject
-            return default(TGridObject);
+        }
+        else
+        {
+            Debug.LogError($"GetGridObject: Invalid coordinates ({x}, {y})");
+            return default(TGridObject); // or throw exception
         }
     }
 
