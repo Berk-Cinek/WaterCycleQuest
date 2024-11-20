@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class NewPlayerMovement : MonoBehaviour
@@ -12,23 +11,21 @@ public class NewPlayerMovement : MonoBehaviour
 
     public IInteractable Interactable { get; set; }
 
-    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
+
     private float dashTimer;
     private float dashCooldownTimer;
     private bool isDashing;
-
-    public float moveSpeed = 5f;
-    private float dashDistance = 10f;
 
     public Rigidbody2D rigidbody2D;
     public Animator animator;
     private GameInput gameInput;
 
     private Vector2 lastMoveDir;
-    public Vector2 movement;
+    private Vector2 movement;
 
     private void Awake()
     {
@@ -47,20 +44,18 @@ public class NewPlayerMovement : MonoBehaviour
         gameInput.Disable();
     }
 
-    void Update()
+    private void Update()
     {
-        
         if (dialogueUI.IsOpen)
         {
-            rigidbody2D.velocity = Vector2.zero; 
-            movement = Vector2.zero; 
-            UpdateAnimator(Vector2.zero); 
+            rigidbody2D.velocity = Vector2.zero;
+            movement = Vector2.zero;
+            UpdateAnimator(Vector2.zero);
             return;
         }
 
         HandleMovement();
 
-        
         if (Input.GetKeyDown(KeyCode.E) && !dialogueUI.IsOpen)
         {
             if (Interactable != null)
@@ -68,20 +63,21 @@ public class NewPlayerMovement : MonoBehaviour
                 Interactable.Interact(this);
             }
         }
+
+        HandleDashCooldown();
     }
 
     private void FixedUpdate()
     {
-        if (!isDashing && !dialogueUI.IsOpen)
-        {
-            rigidbody2D.MovePosition(rigidbody2D.position + movement * moveSpeed * Time.fixedDeltaTime);
-            rigidbody2D.velocity = new Vector2(movement.x, movement.y).normalized * _speed;
-        }
+        if (isDashing || dialogueUI.IsOpen) return;
+
+        // Regular movement
+        rigidbody2D.MovePosition(rigidbody2D.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 
     private void HandleMovement()
     {
-        if (dialogueUI.IsOpen) return; 
+        if (dialogueUI.IsOpen) return;
 
         movement = gameInput.Player.Move.ReadValue<Vector2>();
         UpdateAnimator(movement);
@@ -97,15 +93,11 @@ public class NewPlayerMovement : MonoBehaviour
         animator.SetFloat("Horizontal", currentMovement.x);
         animator.SetFloat("Vertical", currentMovement.y);
         animator.SetFloat("Speed", currentMovement.sqrMagnitude);
+        animator.SetBool("IsDashing", isDashing);
     }
 
-    private void OnDashPerformed(InputAction.CallbackContext context)
+    private void HandleDashCooldown()
     {
-        if (dashCooldownTimer <= 0f && !isDashing && !dialogueUI.IsOpen)
-        {
-            StartDash();
-        }
-
         if (isDashing)
         {
             dashTimer -= Time.deltaTime;
@@ -114,21 +106,58 @@ public class NewPlayerMovement : MonoBehaviour
                 EndDash();
             }
         }
-        else
+        else if (dashCooldownTimer > 0f)
         {
             dashCooldownTimer -= Time.deltaTime;
         }
     }
 
+    private void OnDashPerformed(InputAction.CallbackContext context)
+    {
+        if (dashCooldownTimer <= 0f && !isDashing && !dialogueUI.IsOpen)
+        {
+            StartDash();
+        }
+    }
+
     private void StartDash()
     {
-        if (dialogueUI.IsOpen) return; 
+        if (dialogueUI.IsOpen) return;
 
-        Debug.Log("dashing");
+        Debug.Log("Dashing");
         isDashing = true;
         dashTimer = dashDuration;
         dashCooldownTimer = dashCooldown;
-        rigidbody2D.velocity = lastMoveDir * dashSpeed;
+
+        StartCoroutine(Dash());
+    }
+
+    private IEnumerator Dash()
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < dashDuration)
+        {
+            Vector2 dashStep = lastMoveDir * dashSpeed * Time.fixedDeltaTime;
+
+            
+            RaycastHit2D[] hitResults = new RaycastHit2D[1];
+            int hitCount = rigidbody2D.Cast(dashStep.normalized, new ContactFilter2D(), hitResults, dashStep.magnitude);
+
+            if (hitCount > 0)
+            {
+                Debug.Log("Dash hit: " + hitResults[0].collider.name);
+                break; 
+            }
+
+            
+            rigidbody2D.MovePosition(rigidbody2D.position + dashStep);
+
+            elapsedTime += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
+        }
+
+        EndDash();
     }
 
     private void EndDash()
